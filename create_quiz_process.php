@@ -99,11 +99,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $stmt->close();
 
         // Insert questions and answers
+        $questionNumber = 1; // Start from 1 for proper numbering
         foreach ($questions as $qNum => $question) {
             // Insert question
             $stmt = $conn->prepare("INSERT INTO questions (quiz_id, question_number, question_text) VALUES (?, ?, ?)");
             $questionText = trim($question['text']);
-            $stmt->bind_param("iis", $quizId, $qNum, $questionText);
+            $stmt->bind_param("iis", $quizId, $questionNumber, $questionText);
             $stmt->execute();
             $questionId = $conn->insert_id;
             $stmt->close();
@@ -122,6 +123,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     }
                 }
             }
+
+            $questionNumber++; // Increment for next question
         }
 
         // Commit transaction
