@@ -48,13 +48,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     // Validate each question
+    $questionIndex = 1;
     foreach ($questions as $qNum => $question) {
         if (empty($question['text'])) {
-            $errors[] = "Question {$qNum} text is required.";
+            $errors[] = "Question {$questionIndex} text is required.";
         }
 
         if (!isset($question['answers']) || count($question['answers']) !== $numAnswers) {
-            $errors[] = "Question {$qNum} must have {$numAnswers} answers.";
+            $errors[] = "Question {$questionIndex} must have {$numAnswers} answers.";
         }
 
         // Check if at least one answer is marked as correct
@@ -69,8 +70,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
 
         if (!$hasCorrectAnswer) {
-            $errors[] = "Question {$qNum} must have at least one correct answer.";
+            $errors[] = "Question {$questionIndex} must have at least one correct answer.";
         }
+
+        $questionIndex++;
     }
 
     // If there are validation errors, return them
